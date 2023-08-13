@@ -1,6 +1,7 @@
-import { Autocomplete, Button, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import styled from "styled-components";
 import useDatasources from "../../hooks/useDatasources";
+import useCampaigns from "../../hooks/useCampaigns";
 
 const Section = styled.section`
   background-color: #def7ff;
@@ -13,6 +14,7 @@ const Section = styled.section`
 
 const Filter = () => {
   const dataSources = useDatasources();
+  const campaigns = useCampaigns();
 
   return (
     <Section id="filter">
@@ -21,11 +23,20 @@ const Filter = () => {
         multiple
         id="tags-readOnly"
         options={dataSources}
-        renderInput={(params) => <TextField {...params} label="Data sources" placeholder="Data source" />}
+        renderInput={(params) => <TextField {...params} label="Data sources" placeholder="Select data source" />}
       />
       <h2>Campaign</h2>
-      <p>todo</p>
-      <Button variant="contained">Apply</Button>
+      <Autocomplete
+        multiple
+        id="tags-readOnly"
+        options={campaigns}
+        renderInput={(params) => <TextField {...params} label="Campaigns" placeholder="Select campaign" />}
+      />
+      <Box display="flex" justifyContent="flex-end">
+        <Button variant="contained" sx={{ mt: 3 }}>
+          Apply
+        </Button>
+      </Box>
     </Section>
   );
 };
