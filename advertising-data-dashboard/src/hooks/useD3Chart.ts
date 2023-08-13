@@ -23,9 +23,18 @@ const drawXAxis = (svg: any, xScale: any, height: number, margin: any) => {
     .call(xAxis);
 };
 
-const drawYAxis = (svg: any, yScale: any, margin: any) => {
+const drawYAxis = (svg: any, yScale: any, height: number, margin: any) => {
   const yAxis = axisLeft(yScale);
   svg.append("g").attr("transform", `translate(${margin.left},0)`).call(yAxis);
+
+  svg
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 16)
+    .attr("x", 0 - height / 2)
+    .attr("dy", "1rem")
+    .style("text-anchor", "middle")
+    .text("Clicks");
 };
 
 const drawLineChart = (svg: any, data: ValueInTime[], xScale: any, yScale: any) => {
@@ -77,11 +86,11 @@ export const useD3Chart = (svgRef: React.RefObject<SVGSVGElement>, timeSeriesDat
       const svg = select(svgRef.current);
       const width = 800;
       const height = 400;
-      const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+      const margin = { top: 20, right: 80, bottom: 30, left: 80 };
 
       const { xScale, yScale } = setupScales(timeSeriesData, width, height, margin);
       drawXAxis(svg, xScale, height, margin);
-      drawYAxis(svg, yScale, margin);
+      drawYAxis(svg, yScale, height, margin);
       drawLineChart(svg, timeSeriesData, xScale, yScale);
       drawLegend(svg, width);
     }
