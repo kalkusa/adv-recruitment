@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, Chip, TextField } from "@mui/material";
 import styled from "styled-components";
 import useDatasources from "../../hooks/useDatasources";
 import useCampaigns from "../../hooks/useCampaigns";
@@ -19,12 +19,19 @@ const Filter = () => {
   const campaigns = useCampaigns();
   const { setFilter } = useFilter();
 
-  const handleDataSourceChange = (event: any, newValue: string[]) => {
+  const handleDataSourceChange = (event: any, newValue: any) => {
     setFilter((prev: FilterType) => ({ ...prev, dataSources: newValue }));
   };
 
-  const handleCampaignChange = (event: any, newValue: string[]) => {
+  const handleCampaignChange = (event: any, newValue: any) => {
     setFilter((prev: FilterType) => ({ ...prev, campaigns: newValue }));
+  };
+
+  const renderTags = (value: string[], getTagProps: any) => {
+    return value.map((option: string, index: number) => {
+      let displayText = option.length > 30 ? option.slice(0, 27) + "..." : option;
+      return <Chip variant="outlined" label={displayText} {...getTagProps({ index })} />;
+    });
   };
 
   return (
@@ -36,6 +43,7 @@ const Filter = () => {
         options={dataSources}
         renderInput={(params) => <TextField {...params} label="Data sources" placeholder="Select data source" />}
         onChange={handleDataSourceChange}
+        renderTags={renderTags}
       />
       <h2>Campaign</h2>
       <Autocomplete
@@ -44,6 +52,7 @@ const Filter = () => {
         options={campaigns}
         renderInput={(params) => <TextField {...params} label="Campaigns" placeholder="Select campaign" />}
         onChange={handleCampaignChange}
+        renderTags={renderTags}
       />
       <Box display="flex" justifyContent="flex-end">
         <Button variant="contained" sx={{ mt: 3 }}>

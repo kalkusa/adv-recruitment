@@ -10,13 +10,14 @@ const ChartContainer = styled.div`
 `;
 
 const LeftColumn = styled.div`
-  width: 20%;
+  width: 350px;
   margin-right: 2rem;
   display: flex;
+  flex-shrink: 0; // This ensures the column never shrinks
 `;
 
 const RightColumn = styled.div`
-  width: 80%;
+  flex: 1; // This will make it take up the remaining space
   display: flex;
 `;
 
