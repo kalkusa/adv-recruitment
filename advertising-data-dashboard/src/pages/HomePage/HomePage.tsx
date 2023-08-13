@@ -1,8 +1,7 @@
-import styled from "styled-components";
 import Chart from "../../components/chart/Chart";
 import Filter from "../../components/filter/Filter";
 import Info from "../../components/info/Info";
-import useDatasources from "../../hooks/useDatasources";
+import styled from "styled-components";
 
 const ChartContainer = styled.div`
   display: flex;
@@ -22,9 +21,6 @@ const RightColumn = styled.div`
 `;
 
 const HomePage = () => {
-  const dataSources = useDatasources();
-  console.log("dataSources: %o", dataSources);
-
   return (
     <>
       <h1>Adverity Advertising Data ETL-V Challenge</h1>
