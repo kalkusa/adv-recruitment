@@ -2,17 +2,18 @@ import { useEffect } from "react";
 import { line as d3line, select, scaleTime, extent, scaleLinear, scaleOrdinal, axisBottom, max, axisLeft } from "d3";
 import { ValueInTime } from "../types/chartTypes";
 
-const setupScales = (data: ValueInTime[], width: number, height: number, margin: any) => {
-  const xScale = scaleTime()
-    .domain(extent(data, (d) => d.date) as [Date, Date])
-    .range([margin.left, width - margin.right]);
-
-  const yScale = scaleLinear()
+const setupClicksYScale = (data: ValueInTime[], height: number, margin: any) => {
+  return scaleLinear()
     .domain([0, max(data, (d) => d.value) as number])
     .nice()
     .range([height - margin.bottom, margin.top]);
+};
 
-  return { xScale, yScale };
+const setupImpressionsYScale = (data: ValueInTime[], height: number, margin: any) => {
+  return scaleLinear()
+    .domain([0, max(data, (d) => d.value) as number])
+    .nice()
+    .range([height - margin.bottom, margin.top]);
 };
 
 const drawXAxis = (svg: any, xScale: any, height: number, margin: any) => {
@@ -23,7 +24,7 @@ const drawXAxis = (svg: any, xScale: any, height: number, margin: any) => {
     .call(xAxis);
 };
 
-const drawYAxis = (svg: any, yScale: any, height: number, margin: any) => {
+const drawClicksYAxis = (svg: any, yScale: any, height: number, margin: any) => {
   const yAxis = axisLeft(yScale);
   svg.append("g").attr("transform", `translate(${margin.left},0)`).call(yAxis);
 
@@ -37,7 +38,24 @@ const drawYAxis = (svg: any, yScale: any, height: number, margin: any) => {
     .text("Clicks");
 };
 
-const drawLineChart = (svg: any, data: ValueInTime[], xScale: any, yScale: any) => {
+const drawImpressionsYAxis = (svg: any, yScale: any, width: number, height: number, margin: any) => {
+  const yAxis = axisLeft(yScale).tickFormat((d) => `${d}`);
+  svg
+    .append("g")
+    .attr("transform", `translate(${width - margin.right},0)`)
+    .call(yAxis);
+
+  svg
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -width + margin.right - 20) // Adjusted this line
+    .attr("x", 0 - height / 2)
+    .attr("dy", "1rem")
+    .style("text-anchor", "middle")
+    .text("Impressions");
+};
+
+const drawClicksLineChart = (svg: any, data: ValueInTime[], xScale: any, yScale: any) => {
   const line = d3line<ValueInTime>()
     .x((d) => xScale(d.date))
     .y((d) => yScale(d.value));
@@ -51,8 +69,20 @@ const drawLineChart = (svg: any, data: ValueInTime[], xScale: any, yScale: any) 
     .attr("d", line);
 };
 
+const drawImpressionsLineChart = (svg: any, data: ValueInTime[], xScale: any, yScale: any) => {
+  const line = d3line<ValueInTime>()
+    .x((d) => xScale(d.date))
+    .y((d) => yScale(d.value));
+
+  svg.append("path").datum(data).attr("fill", "none").attr("stroke", "green").attr("stroke-width", 1.5).attr("d", line);
+};
+
 const drawLegend = (svg: any, width: number) => {
-  const color = scaleOrdinal<string, string>().domain(["Clicks"]).range(["#1f77b4"]);
+  const clicksLegendColor = "#1f77b4";
+  const impressionsLegendColor = "green";
+  const legendColors = scaleOrdinal<string, string>()
+    .domain(["Clicks", "Impressions"])
+    .range([clicksLegendColor, impressionsLegendColor]);
 
   const legend = svg
     .append("g")
@@ -60,7 +90,7 @@ const drawLegend = (svg: any, width: number) => {
     .attr("font-size", 10)
     .attr("text-anchor", "end")
     .selectAll("g")
-    .data(color.domain())
+    .data(legendColors.domain())
     .enter()
     .append("g")
     .attr("transform", (d: any, i: number) => `translate(0,${i * 20})`);
@@ -70,7 +100,7 @@ const drawLegend = (svg: any, width: number) => {
     .attr("x", width - 19)
     .attr("width", 19)
     .attr("height", 19)
-    .attr("fill", color);
+    .attr("fill", legendColors);
 
   legend
     .append("text")
@@ -80,20 +110,34 @@ const drawLegend = (svg: any, width: number) => {
     .text((d: any) => d);
 };
 
-export const useD3Chart = (svgRef: React.RefObject<SVGSVGElement>, timeSeriesData: ValueInTime[]) => {
+export const useD3Chart = (
+  svgRef: React.RefObject<SVGSVGElement>,
+  clicksTimeSeriesData: ValueInTime[],
+  impressionsTimeSeriesData: ValueInTime[]
+) => {
   useEffect(() => {
-    if (svgRef.current && timeSeriesData.length) {
+    if (svgRef.current && clicksTimeSeriesData.length && impressionsTimeSeriesData.length) {
       const svg = select(svgRef.current);
       svg.selectAll("*").remove(); // This clears all child elements of the SVG
       const width = 800;
       const height = 400;
       const margin = { top: 20, right: 80, bottom: 30, left: 80 };
 
-      const { xScale, yScale } = setupScales(timeSeriesData, width, height, margin);
+      const xScale = scaleTime()
+        .domain(extent([...clicksTimeSeriesData, ...impressionsTimeSeriesData], (d) => d.date) as [Date, Date])
+        .range([margin.left, width - margin.right]);
+
+      const clicksYScale = setupClicksYScale(clicksTimeSeriesData, height, margin);
+      const impressionsYScale = setupImpressionsYScale(impressionsTimeSeriesData, height, margin);
+
       drawXAxis(svg, xScale, height, margin);
-      drawYAxis(svg, yScale, height, margin);
-      drawLineChart(svg, timeSeriesData, xScale, yScale);
+      drawClicksYAxis(svg, clicksYScale, height, margin);
+      drawImpressionsYAxis(svg, impressionsYScale, width, height, margin);
+
+      drawClicksLineChart(svg, clicksTimeSeriesData, xScale, clicksYScale);
+      drawImpressionsLineChart(svg, impressionsTimeSeriesData, xScale, impressionsYScale);
+
       drawLegend(svg, width);
     }
-  }, [svgRef, timeSeriesData]);
+  }, [svgRef, clicksTimeSeriesData, impressionsTimeSeriesData]);
 };
