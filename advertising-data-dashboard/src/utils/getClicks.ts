@@ -42,7 +42,5 @@ export const getClicksDataByFilter = (data: AdvertisingDataRow[], filter: Filter
     return row;
   });
 
-  console.log("getClicksDataByFilter filteredData: %o", filteredData);
-
   return getAllClicks(filteredData);
 };
