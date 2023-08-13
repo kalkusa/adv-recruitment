@@ -54,11 +54,11 @@ const Filter = () => {
         onChange={handleCampaignChange}
         renderTags={renderTags}
       />
-      <Box display="flex" justifyContent="flex-end">
+      {/* <Box display="flex" justifyContent="flex-end">
         <Button variant="contained" sx={{ mt: 3 }}>
           Apply
         </Button>
-      </Box>
+      </Box> */}
     </Section>
   );
 };

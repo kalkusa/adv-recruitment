@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import useTimeSeries from "../../hooks/useTimeSeries";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useD3Chart } from "../../hooks/useD3Chart";
 import { CircularProgress } from "@mui/material";
 import { useFilter } from "../../hooks/useFilter";
@@ -13,14 +13,11 @@ const Section = styled.section`
 `;
 
 const Chart = () => {
-  const timeSeriesData = useTimeSeries();
-  const svgRef = useRef<SVGSVGElement | null>(null);
   const { filter } = useFilter();
-  useD3Chart(svgRef, timeSeriesData);
+  const timeSeriesData = useTimeSeries(filter);
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
-  useEffect(() => {
-    console.log("Filter has changed!", filter);
-  }, [filter]);
+  useD3Chart(svgRef, timeSeriesData);
 
   return (
     <Section id="chart">

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { AdvertisingDataRow, ValueInTime } from "../types/chartTypes";
+import { AdvertisingDataRow, Filter, ValueInTime } from "../types/chartTypes";
 import parseCSV from "../utils/parseCsv";
-import { getAllClicks } from "../utils/getClicks";
+import { getAllClicks, getClicksDataByFilter } from "../utils/getClicks";
 import useDataUrl from "./useDataUrl";
 
-const useTimeSeries = (): ValueInTime[] => {
+const useTimeSeries = (filter: Filter): ValueInTime[] => {
   const dataUrl = useDataUrl();
   const [timeSeries, setTimeSeries] = useState<ValueInTime[]>([]);
 
@@ -14,15 +14,20 @@ const useTimeSeries = (): ValueInTime[] => {
         const response = await fetch(dataUrl);
         const csvData = await response.text();
         const parsedData: AdvertisingDataRow[] = parseCSV(csvData);
-        const clicksTimeSeries: ValueInTime[] = getAllClicks(parsedData);
-        setTimeSeries(clicksTimeSeries);
+        if (filter.campaigns.length === 0 && filter.dataSources.length === 0) {
+          const clicksTimeSeries: ValueInTime[] = getAllClicks(parsedData);
+          setTimeSeries(clicksTimeSeries);
+        } else {
+          const clicksTimeSeries: ValueInTime[] = getClicksDataByFilter(parsedData, filter);
+          setTimeSeries(clicksTimeSeries);
+        }
       } catch (error) {
         console.error("Error fetching or processing the CSV data:", error);
       }
     };
 
     fetchData();
-  }, [dataUrl]);
+  }, [dataUrl, filter]);
 
   return timeSeries;
 };

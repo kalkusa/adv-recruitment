@@ -84,6 +84,7 @@ export const useD3Chart = (svgRef: React.RefObject<SVGSVGElement>, timeSeriesDat
   useEffect(() => {
     if (svgRef.current && timeSeriesData.length) {
       const svg = select(svgRef.current);
+      svg.selectAll("*").remove(); // This clears all child elements of the SVG
       const width = 800;
       const height = 400;
       const margin = { top: 20, right: 80, bottom: 30, left: 80 };

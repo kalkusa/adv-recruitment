@@ -26,5 +26,23 @@ export const getAllClicks = (data: AdvertisingDataRow[]): ValueInTime[] => {
 };
 
 export const getClicksDataByFilter = (data: AdvertisingDataRow[], filter: Filter): ValueInTime[] => {
-  return [];
+  const filteredData = data.filter((row) => {
+    if (filter.dataSources.length > 0 && filter.campaigns.length > 0) {
+      return filter.dataSources.includes(row.datasource) && filter.campaigns.includes(row.campaign);
+    }
+
+    if (filter.dataSources.length > 0 && filter.campaigns.length === 0) {
+      return filter.dataSources.includes(row.datasource);
+    }
+
+    if (filter.campaigns.length > 0 && filter.dataSources.length === 0) {
+      return filter.dataSources.includes(row.campaign);
+    }
+
+    return row;
+  });
+
+  console.log("getClicksDataByFilter filteredData: %o", filteredData);
+
+  return getAllClicks(filteredData);
 };
