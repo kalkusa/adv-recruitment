@@ -44,7 +44,7 @@ export const getClicksDataByFilter = (data: AdvertisingDataRow[], filter: Filter
     }
 
     if (filter.campaigns.length > 0 && filter.dataSources.length === 0) {
-      return filter.dataSources.includes(row.campaign);
+      return filter.campaigns.includes(row.campaign);
     }
 
     return row;
