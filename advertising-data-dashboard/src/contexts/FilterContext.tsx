@@ -5,7 +5,12 @@ interface Props {
   children?: ReactNode;
 }
 
-export const FilterContext = createContext<any>(null);
+export interface FilterContextValue {
+  filter: Filter;
+  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
+}
+
+export const FilterContext = createContext<FilterContextValue | null>(null);
 
 export const FilterProvider = ({ children }: Props) => {
   const [filter, setFilter] = useState<Filter>({

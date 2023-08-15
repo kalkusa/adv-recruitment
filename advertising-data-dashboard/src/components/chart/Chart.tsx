@@ -5,12 +5,14 @@ import { CircularProgress } from "@mui/material";
 import { useFilter } from "../../hooks/useFilter";
 import useClicksTimeSeries from "../../hooks/useClicksTimeSeries";
 import useImpressionsTimeSeries from "../../hooks/useImpressionsTimeSeries";
+import Filter from "../filter/Filter";
 
 const Section = styled.section`
   border-width: 1px;
   border-style: solid;
   border-color: #f8f8f8;
   flex: 1;
+  padding: 1rem;
 `;
 
 const ChartContainer = styled.div`
@@ -29,9 +31,21 @@ const Chart = () => {
 
   useD3Chart(svgRef, clicksTimeSeriesData, impressionsTimeSeriesData);
 
+  const getTitle = () => {
+    const selectedDataSourcesLabel =
+      filter.dataSources.length > 0
+        ? `Datasources: ${filter.dataSources.map((item) => `"${item}"`).join(" and ")}`
+        : "All Datasources";
+    const selectedCampaignsSourcesLabel =
+      filter.campaigns.length > 0
+        ? `Campaigns: ${filter.campaigns.map((item) => `"${item}"`).join(" and ")}`
+        : "All Campaigns";
+    return `${selectedDataSourcesLabel}; ${selectedCampaignsSourcesLabel}`;
+  };
+
   return (
     <Section id="chart">
-      <h1>Datasource TODO</h1>
+      <h1>{getTitle()}</h1>
       <ChartContainer>
         {clicksTimeSeriesData?.length > 1 && impressionsTimeSeriesData?.length > 1 ? (
           <svg ref={svgRef} width="800" height="400"></svg>
