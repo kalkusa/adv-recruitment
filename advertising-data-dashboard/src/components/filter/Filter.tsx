@@ -27,12 +27,12 @@ const AutocompleteSkeleton = styled(Skeleton)`
 `;
 
 const Filter = () => {
+  const { filter, setFilter } = useFilter();
   const dataSources = useDatasources();
-  const campaigns = useCampaigns();
-  const { setFilter } = useFilter();
+  const campaigns = useCampaigns(filter.dataSources);
 
   const handleDataSourceChange = (event: any, newValue: any) => {
-    setFilter((prev: FilterType) => ({ ...prev, dataSources: newValue }));
+    setFilter({ dataSources: newValue, campaigns: [] });
   };
 
   const handleCampaignChange = (event: any, newValue: any) => {
@@ -58,7 +58,9 @@ const Filter = () => {
             multiple
             id="dataSources"
             options={dataSources}
-            renderInput={(params) => <TextField {...params} label="Data sources" placeholder="Select data source" />}
+            renderInput={(params) => (
+              <TextField {...params} label="All data sources" placeholder="Select data source" />
+            )}
             onChange={handleDataSourceChange}
             renderTags={renderTags}
           />
@@ -72,7 +74,8 @@ const Filter = () => {
             multiple
             id="campaigns"
             options={campaigns}
-            renderInput={(params) => <TextField {...params} label="Campaigns" placeholder="Select campaign" />}
+            value={campaigns.filter((campaign) => filter.campaigns.includes(campaign))}
+            renderInput={(params) => <TextField {...params} label="All campaigns" placeholder="Select campaign" />}
             onChange={handleCampaignChange}
             renderTags={renderTags}
           />
