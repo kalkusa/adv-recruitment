@@ -2,7 +2,8 @@ import { parse, startOfDay } from "date-fns";
 import { AdvertisingDataRow } from "../types/chartTypes";
 
 const parseCSV = (data: string): AdvertisingDataRow[] => {
-  const [headersRow, ...lines] = data.split("\n");
+  const normalizedCsvData = data.replace(/\r\n/g, "\n");
+  const [headersRow, ...lines] = normalizedCsvData.split("\n");
   const headers = headersRow.split(",").map((header) => header.toLowerCase());
   const datePattern = /^\d{2}\.\d{2}\.\d{4}$/;
 

@@ -29,7 +29,6 @@ export const getAllImpressions = (data: AdvertisingDataRow[]): ValueInTime[] => 
   });
 
   impressionsByDateArray.sort((a, b) => a.date.getTime() - b.date.getTime());
-
   return impressionsByDateArray;
 };
 

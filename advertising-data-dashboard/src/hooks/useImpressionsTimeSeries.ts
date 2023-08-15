@@ -11,11 +11,11 @@ const useImpressionsTimeSeries = (filter: Filter): ValueInTime[] => {
     const fetchData = async () => {
       try {
         if (filter.campaigns.length === 0 && filter.dataSources.length === 0) {
-          const clicksTimeSeries: ValueInTime[] = getAllImpressions(parsedData);
-          setTimeSeries(clicksTimeSeries);
+          const impressionsTimeSeries: ValueInTime[] = getAllImpressions(parsedData);
+          setTimeSeries(impressionsTimeSeries);
         } else {
-          const clicksTimeSeries: ValueInTime[] = getImpressionsDataByFilter(parsedData, filter);
-          setTimeSeries(clicksTimeSeries);
+          const impressionsTimeSeries: ValueInTime[] = getImpressionsDataByFilter(parsedData, filter);
+          setTimeSeries(impressionsTimeSeries);
         }
       } catch (error) {
         console.error("Error fetching or processing the CSV data:", error);
