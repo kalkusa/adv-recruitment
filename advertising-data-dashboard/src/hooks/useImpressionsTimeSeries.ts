@@ -1,19 +1,15 @@
-import { useState, useEffect } from "react";
-import { AdvertisingDataRow, Filter, ValueInTime } from "../types/chartTypes";
-import parseCSV from "../utils/parseCsv";
-import useDataUrl from "./useDataUrl";
+import { useState, useEffect, useContext } from "react";
+import { Filter, ValueInTime } from "../types/chartTypes";
 import { getAllImpressions, getImpressionsDataByFilter } from "../utils/getImpressions";
+import { ParsedDataContext } from "../contexts/ParsedDataContext";
 
 const useImpressionsTimeSeries = (filter: Filter): ValueInTime[] => {
-  const dataUrl = useDataUrl();
+  const parsedData = useContext(ParsedDataContext);
   const [timeSeries, setTimeSeries] = useState<ValueInTime[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(dataUrl);
-        const csvData = await response.text();
-        const parsedData: AdvertisingDataRow[] = parseCSV(csvData);
         if (filter.campaigns.length === 0 && filter.dataSources.length === 0) {
           const clicksTimeSeries: ValueInTime[] = getAllImpressions(parsedData);
           setTimeSeries(clicksTimeSeries);
@@ -27,7 +23,7 @@ const useImpressionsTimeSeries = (filter: Filter): ValueInTime[] => {
     };
 
     fetchData();
-  }, [dataUrl, filter]);
+  }, [parsedData, filter]);
 
   return timeSeries;
 };

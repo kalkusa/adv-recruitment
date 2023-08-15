@@ -1,23 +1,15 @@
 import _ from "lodash";
-import { useEffect, useState } from "react";
-import parseCSV from "../utils/parseCsv";
-import useDataUrl from "./useDataUrl";
+import { useContext, useEffect, useState } from "react";
+import { ParsedDataContext } from "../contexts/ParsedDataContext";
 
 const useDatasources = (): string[] => {
-  const dataUrl = useDataUrl();
+  const parsedData = useContext(ParsedDataContext);
   const [datasources, setDatasources] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(dataUrl);
-      const csvData = await response.text();
-      const parsedData = parseCSV(csvData);
-      const uniqueDatasources = _.uniq(parsedData.map((item) => item.datasource));
-      setDatasources(uniqueDatasources);
-    };
-
-    fetchData();
-  }, [dataUrl]);
+    const uniqueDatasources = _.uniq(parsedData.map((item) => item.datasource));
+    setDatasources(uniqueDatasources);
+  }, [parsedData]);
 
   return datasources;
 };

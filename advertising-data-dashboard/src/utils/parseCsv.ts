@@ -1,31 +1,27 @@
-import _ from "lodash";
 import { parse, startOfDay } from "date-fns";
 import { AdvertisingDataRow } from "../types/chartTypes";
 
 const parseCSV = (data: string): AdvertisingDataRow[] => {
-  const [headers, ...lines] = data.split("\n");
-
-  const isDate = (value: string): boolean => {
-    const datePattern = /^\d{2}\.\d{2}\.\d{4}$/;
-    return datePattern.test(value);
-  };
-
-  const convertToTypes = (value: string): string | number | Date => {
-    if (isDate(value)) {
-      return startOfDay(parse(value, "dd.MM.yyyy", new Date()));
-    }
-
-    return isNaN(Number(value)) ? value : Number(value);
-  };
+  const [headersRow, ...lines] = data.split("\n");
+  const headers = headersRow.split(",").map((header) => header.toLowerCase());
+  const datePattern = /^\d{2}\.\d{2}\.\d{4}$/;
 
   const result = lines.map((line) => {
-    const values = line.split(",").map(convertToTypes);
+    const values = line.split(",").map((value) => {
+      if (datePattern.test(value)) {
+        return startOfDay(parse(value, "dd.MM.yyyy", new Date()));
+      }
 
-    // Zip object creates object with keys from CSV headers and put values from parsed row
-    return _.zipObject(
-      headers.split(",").map((header) => header.toLowerCase()),
-      values
-    ) as AdvertisingDataRow;
+      return isNaN(Number(value)) ? value : Number(value);
+    });
+
+    const rowObject: any = {};
+
+    headers.forEach((header, index) => {
+      rowObject[header] = values[index];
+    });
+
+    return rowObject as AdvertisingDataRow;
   });
 
   return result;

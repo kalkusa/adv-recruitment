@@ -13,6 +13,14 @@ const Section = styled.section`
   flex: 1;
 `;
 
+const ChartContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  width: 800px;
+`;
+
 const Chart = () => {
   const { filter } = useFilter();
   const clicksTimeSeriesData = useClicksTimeSeries(filter);
@@ -24,13 +32,13 @@ const Chart = () => {
   return (
     <Section id="chart">
       <h1>Datasource TODO</h1>
-      {clicksTimeSeriesData?.length > 1 && impressionsTimeSeriesData?.length > 1 ? (
-        <div>
+      <ChartContainer>
+        {clicksTimeSeriesData?.length > 1 && impressionsTimeSeriesData?.length > 1 ? (
           <svg ref={svgRef} width="800" height="400"></svg>
-        </div>
-      ) : (
-        <CircularProgress disableShrink />
-      )}
+        ) : (
+          <CircularProgress disableShrink />
+        )}
+      </ChartContainer>
     </Section>
   );
 };

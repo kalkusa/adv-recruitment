@@ -1,23 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import _ from "lodash";
-import parseCSV from "../utils/parseCsv";
-import useDataUrl from "./useDataUrl";
+import { ParsedDataContext } from "../contexts/ParsedDataContext";
 
 const useCampaigns = (): string[] => {
-  const dataUrl = useDataUrl();
+  const parsedData = useContext(ParsedDataContext);
   const [campaigns, setCampaigns] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(dataUrl);
-      const csvData = await response.text();
-      const parsedData = parseCSV(csvData);
-      const uniqueCampaigns = _.uniq(parsedData.map((item) => item.campaign));
-      setCampaigns(uniqueCampaigns);
-    };
-
-    fetchData();
-  }, [dataUrl]);
+    const uniqueCampaigns = _.uniq(parsedData.map((item) => item.campaign));
+    setCampaigns(uniqueCampaigns);
+  }, [parsedData]);
 
   return campaigns;
 };

@@ -1,4 +1,4 @@
-import { Autocomplete, Chip, TextField } from "@mui/material";
+import { Autocomplete, Chip, Skeleton, TextField } from "@mui/material";
 import styled from "styled-components";
 import useDatasources from "../../hooks/useDatasources";
 import useCampaigns from "../../hooks/useCampaigns";
@@ -12,6 +12,18 @@ const Section = styled.section`
   border-color: #f8f8f8;
   flex: 1;
   padding: 1rem;
+`;
+
+const AutocompleteContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  min-height: 60px;
+  margin-bottom: 1rem;
+`;
+
+const AutocompleteSkeleton = styled(Skeleton)`
+  flex-grow: 1;
 `;
 
 const Filter = () => {
@@ -36,29 +48,36 @@ const Filter = () => {
 
   return (
     <Section id="filter">
-      <h1>Filter dimention values</h1>
-      <Autocomplete
-        multiple
-        id="dataSources"
-        options={dataSources}
-        renderInput={(params) => <TextField {...params} label="Data sources" placeholder="Select data source" />}
-        onChange={handleDataSourceChange}
-        renderTags={renderTags}
-      />
-      <h2>Campaign</h2>
-      <Autocomplete
-        multiple
-        id="campaigns"
-        options={campaigns}
-        renderInput={(params) => <TextField {...params} label="Campaigns" placeholder="Select campaign" />}
-        onChange={handleCampaignChange}
-        renderTags={renderTags}
-      />
-      {/* <Box display="flex" justifyContent="flex-end">
-        <Button variant="contained" sx={{ mt: 3 }}>
-          Apply
-        </Button>
-      </Box> */}
+      <h1>Filter dimension values</h1>
+
+      <AutocompleteContainer>
+        {dataSources.length === 0 ? (
+          <AutocompleteSkeleton variant="rounded" />
+        ) : (
+          <Autocomplete
+            multiple
+            id="dataSources"
+            options={dataSources}
+            renderInput={(params) => <TextField {...params} label="Data sources" placeholder="Select data source" />}
+            onChange={handleDataSourceChange}
+            renderTags={renderTags}
+          />
+        )}
+      </AutocompleteContainer>
+      <AutocompleteContainer>
+        {campaigns.length === 0 ? (
+          <AutocompleteSkeleton variant="rounded" />
+        ) : (
+          <Autocomplete
+            multiple
+            id="campaigns"
+            options={campaigns}
+            renderInput={(params) => <TextField {...params} label="Campaigns" placeholder="Select campaign" />}
+            onChange={handleCampaignChange}
+            renderTags={renderTags}
+          />
+        )}
+      </AutocompleteContainer>
     </Section>
   );
 };
