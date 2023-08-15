@@ -6,7 +6,7 @@ import React from "react";
 export const ParsedDataContext = createContext<AdvertisingDataRow[]>([]);
 
 type ParsedDataProviderProps = {
-  children: React.ReactNode; // 👈️ added type for children
+  children: React.ReactNode;
 };
 
 export const ParsedDataProvider = React.memo(({ children }: ParsedDataProviderProps) => {

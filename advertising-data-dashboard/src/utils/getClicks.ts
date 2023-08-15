@@ -1,28 +1,36 @@
-import _ from "lodash";
 import { AdvertisingDataRow, Filter, ValueInTime } from "../types/chartTypes";
-import { isSameDay } from "date-fns";
 
-export const getAllClicks = (data: AdvertisingDataRow[]): ValueInTime[] => {
-  const clicksByDate = _(data)
-    .orderBy(["date"], ["asc"]) // sort by date ascending
-    .reduce((acc: AdvertisingDataRow[], curr: AdvertisingDataRow) => {
-      // Because each row contain amount of clicks for particular date, campaign and data source,
-      // we need to sum clicks for all data sources and campaigns
-      const existingEntry = acc.find((entry: any) => {
-        return isSameDay(entry.date, curr.date);
-      });
-      if (existingEntry) {
-        existingEntry.clicks = existingEntry.clicks + curr.clicks;
-      } else {
-        acc.push({ ...curr });
-      }
-      return acc;
-    }, [])
-    .map((row: any) => {
-      return { date: row.date, value: row.clicks } as ValueInTime;
-    });
+const getClicksByDate = (data: AdvertisingDataRow[]) => {
+  // For quick access to data we use Map. Maps under the hood are hash tables [1].
+  // Algorithm below is in its nature similar to https://en.wikipedia.org/wiki/Counting_sort
+  // [1] https://262.ecma-international.org/6.0/#sec-map-objects
+  const clicksByDate: Map<string, number> = new Map<string, number>();
+
+  for (let i = 0; i < data.length; i++) {
+    const key = data[i].date.toISOString();
+    const clicksByGivenDate = clicksByDate.get(key);
+    if (clicksByGivenDate) {
+      clicksByDate.set(key, clicksByGivenDate + data[i].clicks);
+    } else {
+      clicksByDate.set(key, data[i].clicks);
+    }
+  }
 
   return clicksByDate;
+};
+
+export const getAllClicks = (data: AdvertisingDataRow[]): ValueInTime[] => {
+  const clicksByDate = getClicksByDate(data);
+  const clicksByDateArray: ValueInTime[] = [];
+
+  clicksByDate.forEach((value, dateStr) => {
+    const date = new Date(dateStr);
+    clicksByDateArray.push({ date, value });
+  });
+
+  clicksByDateArray.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return clicksByDateArray;
 };
 
 export const getClicksDataByFilter = (data: AdvertisingDataRow[], filter: Filter): ValueInTime[] => {

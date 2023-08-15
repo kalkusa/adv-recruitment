@@ -13,11 +13,11 @@ const LeftColumn = styled.div`
   width: 350px;
   margin-right: 2rem;
   display: flex;
-  flex-shrink: 0; // This ensures the column never shrinks
+  flex-shrink: 0;
 `;
 
 const RightColumn = styled.div`
-  flex: 1; // This will make it take up the remaining space
+  flex: 1;
   display: flex;
 `;
 
