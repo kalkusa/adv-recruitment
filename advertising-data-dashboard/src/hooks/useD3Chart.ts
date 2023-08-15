@@ -48,7 +48,7 @@ const drawImpressionsYAxis = (svg: any, yScale: any, width: number, height: numb
   svg
     .append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", -width + margin.right - 20) // Adjusted this line
+    .attr("y", width - margin.left + 20) // Adjusted this line
     .attr("x", 0 - height / 2)
     .attr("dy", "1rem")
     .style("text-anchor", "middle")
