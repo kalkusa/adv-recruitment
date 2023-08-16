@@ -5,7 +5,6 @@ import { CircularProgress } from "@mui/material";
 import { useFilter } from "../../hooks/useFilter";
 import useClicksTimeSeries from "../../hooks/useClicksTimeSeries";
 import useImpressionsTimeSeries from "../../hooks/useImpressionsTimeSeries";
-import Filter from "../filter/Filter";
 
 const Section = styled.section`
   border-width: 1px;
