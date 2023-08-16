@@ -1,46 +1,41 @@
-# Getting Started with Create React App
+# Template-Frontend-Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Advertising Data ETL-V
+You are going to write a simple web application, that fetches advertising data from a given endpoint to eventually visualize it on a simple interactive dashboard. <br/>
 
-## Available Scripts
+For this, you need to first extract the data (a CSV file) from [http://adverity-challenge.s3-website-eu-west-1.amazonaws.com/DAMKBAoDBwoDBAkOBAYFCw.csv](http://adverity-challenge.s3-website-eu-west-1.amazonaws.com/DAMKBAoDBwoDBAkOBAYFCw.csv).
 
-In the project directory, you can run:
+The data contains:
+- one time dimension (*Date*)
+- two regular dimensions (*Campaign*, *Datasource*)
+- two metrics (*Clicks*, *Impressions*)
 
-### `npm start`
+The goal is to provide a **simple dashboard**, that shows those **metrics** for given regular dimension values (as user input) **over time**. It could look like this:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![example](images/dashboard.png)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Initially, no *Datasource* or *Campaign* is selected, hence the chart should show *Clicks* and *Impressions* over time for the entire data set. Users can then filter the dataset for both *Datasources* and *Campaigns*. <br/>
 
-### `npm test`
+Keep your UI/UX simple and only implement basic functionalities. The focus lies on the proper design of your application. <br/>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+If not told otherwise, use one of the following tech stacks:
 
-### `npm run build`
+## A) React Frontend only
+Use react with:
+- [create-react-app](https://github.com/facebook/create-react-app) to bootstrap your application
+- [with a proper design of your components](https://facebook.github.io/react/docs/thinking-in-react.html)
+- react hooks to manage state and side effects
+- lodash to transform your data
+- an idiomatic functional programming approach with javascript / es6
+to implement the entire application as a pure frontend application - that fetches the data, does the heavy computation and visualizes the result.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## B) Django only
+Use django (with django views) to extract, transform, load, query and visualize the data.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## C) Backend and frontend
+Use either **django** or **micronaut** (with groovy or kotlin) to implement the backend. <br/>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+And **react** with [create-react-app](https://github.com/facebook/create-react-app) for the frontend. <br/>
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Carefully draw boundaries on who is responsible for what.
+   
