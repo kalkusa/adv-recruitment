@@ -88,36 +88,32 @@ const drawImpressionsLineChart = (svg: any, data: ValueInTime[], xScale: any, yS
   svg.append("path").datum(data).attr("fill", "none").attr("stroke", "green").attr("stroke-width", 1.5).attr("d", line);
 };
 
-const drawLegend = (svg: any, width: number) => {
+const drawLegend = (svg: any) => {
   const clicksLegendColor = "#1f77b4";
   const impressionsLegendColor = "green";
   const legendColors = scaleOrdinal<string, string>()
     .domain(["Clicks", "Impressions"])
     .range([clicksLegendColor, impressionsLegendColor]);
 
+  const legendSpacing = 75;
+
   const legend = svg
     .append("g")
     .attr("font-family", "sans-serif")
     .attr("font-size", 10)
-    .attr("text-anchor", "end")
+    .attr("text-anchor", "start")
     .selectAll("g")
     .data(legendColors.domain())
     .enter()
     .append("g")
-    .attr("transform", (d: any, i: number) => `translate(0,${i * 20})`);
+    .attr("transform", (d: any, i: number) => `translate(${i * legendSpacing}, 360)`);
 
-  legend
-    .append("rect")
-    .attr("x", width / 2 - 19)
-    .attr("y", 360)
-    .attr("width", 19)
-    .attr("height", 19)
-    .attr("fill", legendColors);
+  legend.append("rect").attr("x", 340).attr("y", 0).attr("width", 19).attr("height", 19).attr("fill", legendColors);
 
   legend
     .append("text")
-    .attr("x", width / 2 - 24)
-    .attr("y", 370)
+    .attr("x", 365)
+    .attr("y", 9.5)
     .attr("dy", "0.32em")
     .text((d: any) => d);
 };
@@ -149,7 +145,7 @@ export const useD3Chart = (
       drawClicksLineChart(svg, clicksTimeSeriesData, xScale, clicksYScale);
       drawImpressionsLineChart(svg, impressionsTimeSeriesData, xScale, impressionsYScale);
 
-      drawLegend(svg, width);
+      drawLegend(svg);
     }
   }, [svgRef, clicksTimeSeriesData, impressionsTimeSeriesData]);
 };
