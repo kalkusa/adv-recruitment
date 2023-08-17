@@ -54,6 +54,12 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@types/lodash": "^4.14.197"
+    "@types/lodash": "^4.14.197",
+    "jest-environment-jsdom": "^29.6.2",
+    "ts-jest": "^29.1.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom"
   }
 }
