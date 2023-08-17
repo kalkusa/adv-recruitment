@@ -22,6 +22,10 @@ const ChartContainer = styled.div`
   width: 800px;
 `;
 
+const Title = styled.h1`
+  width: 800px;
+`;
+
 const Chart = () => {
   const { filter } = useFilter();
   const clicksTimeSeriesData = useClicksTimeSeries(filter);
@@ -44,7 +48,7 @@ const Chart = () => {
 
   return (
     <Section id="chart">
-      <h1>{getTitle()}</h1>
+      <Title>{getTitle()}</Title>
       <ChartContainer>
         {clicksTimeSeriesData?.length > 1 && impressionsTimeSeriesData?.length > 1 ? (
           <svg ref={svgRef} width="800" height="400"></svg>

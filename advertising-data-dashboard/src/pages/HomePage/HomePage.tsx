@@ -6,7 +6,7 @@ import styled from "styled-components";
 const ChartContainer = styled.div`
   display: flex;
   margin-top: 1rem;
-  height: 500px;
+  height: 700px;
 `;
 
 const LeftColumn = styled.div`
