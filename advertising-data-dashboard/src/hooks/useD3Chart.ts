@@ -46,6 +46,7 @@ const drawClicksYAxis = (svg: any, yScale: any, width: number, height: number, m
     .attr("x", 0 - height / 2 + 15)
     .attr("dy", "1rem")
     .style("text-anchor", "middle")
+    .style("font-weight", "bold")
     .text("Clicks");
 
   svg
@@ -70,6 +71,7 @@ const drawImpressionsYAxis = (svg: any, yScale: any, width: number, height: numb
     .attr("x", height / 2 - 20)
     .attr("dy", "1rem")
     .style("text-anchor", "middle")
+    .style("font-weight", "bold")
     .text("Impressions");
 };
 
@@ -107,7 +109,8 @@ const drawLegend = (svg: any) => {
   const legend = svg
     .append("g")
     .attr("font-family", "sans-serif")
-    .attr("font-size", 10)
+    .attr("font-size", 12)
+    .style("font-weight", "bold")
     .attr("text-anchor", "start")
     .selectAll("g")
     .data(legendColors.domain())
