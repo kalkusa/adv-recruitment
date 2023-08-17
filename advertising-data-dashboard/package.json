@@ -57,9 +57,5 @@
     "@types/lodash": "^4.14.197",
     "jest-environment-jsdom": "^29.6.2",
     "ts-jest": "^29.1.1"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "jsdom"
   }
 }
