@@ -50,9 +50,10 @@ const drawClicksYAxis = (svg: any, yScale: any, width: number, height: number, m
 
   svg
     .selectAll(".y-axis .tick line")
-    .filter((d: any, i: number) => i !== 0) // Exclude the first tick line
-    .attr("stroke", "silver")
-    .attr("x1", width - 160);
+    .filter((d: any, i: number) => i !== 0) // Exclude the first tick line (actually last)
+    .attr("stroke", "#f0f0f0")
+    .attr("x1", 1) // Tick line left padding
+    .attr("x2", width - 160); // Tick line width
 };
 
 const drawImpressionsYAxis = (svg: any, yScale: any, width: number, height: number, margin: any) => {
