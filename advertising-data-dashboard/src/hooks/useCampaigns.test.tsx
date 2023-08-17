@@ -1,8 +1,7 @@
-import { renderHook, waitFor } from "@testing-library/react";
-import useCampaigns from "./useCampaigns";
+// import { renderHook, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { ParsedDataContext } from "../contexts/ParsedDataContext";
-import { Context } from "react";
-import React from "react";
+import useCampaigns from "./useCampaigns";
 
 const mockData = [
   {
@@ -21,35 +20,33 @@ const mockData = [
   },
 ];
 
+const TestComponent = ({ dataSources }: { dataSources: string[] }) => {
+  const campaigns = useCampaigns(dataSources);
+  return <div data-testid="campaigns">{campaigns.join(", ")}</div>;
+};
+
 describe("useCampaigns", () => {
-  let useContextSpy: jest.SpyInstance<unknown, [context: Context<unknown>]>;
-
-  beforeEach(() => {
-    useContextSpy = jest.spyOn(React, "useContext").mockImplementation((context) => {
-      if (context === ParsedDataContext) {
-        return mockData;
-      }
-      return context;
-    });
-  });
-
-  afterEach(() => {
-    useContextSpy.mockRestore();
-  });
-
   it("should fetch and return all campaigns if no data source is provided", async () => {
-    const { result } = renderHook(() => useCampaigns([]));
+    render(
+      <ParsedDataContext.Provider value={mockData}>
+        <TestComponent dataSources={[]} />
+      </ParsedDataContext.Provider>
+    );
 
     await waitFor(() => {
-      expect(result.current).toEqual(["Like Ads", "B2B - Leads"]);
+      expect(screen.getByTestId("campaigns").textContent).toBe("Like Ads, B2B - Leads");
     });
   });
 
   it("should fetch and return campaigns filtered by data source", async () => {
-    const { result } = renderHook(() => useCampaigns(["Facebook Ads"]));
+    render(
+      <ParsedDataContext.Provider value={mockData}>
+        <TestComponent dataSources={["Facebook Ads"]} />
+      </ParsedDataContext.Provider>
+    );
 
     await waitFor(() => {
-      expect(result.current).toEqual(["Like Ads"]);
+      expect(screen.getByTestId("campaigns").textContent).toBe("Like Ads");
     });
   });
 });
