@@ -35,9 +35,9 @@ const drawXAxis = (svg: any, xScale: any, height: number, margin: any) => {
     .call(xAxis);
 };
 
-const drawClicksYAxis = (svg: any, yScale: any, height: number, margin: any) => {
+const drawClicksYAxis = (svg: any, yScale: any, width: number, height: number, margin: any) => {
   const yAxis = axisLeft(yScale);
-  svg.append("g").attr("transform", `translate(${margin.left},0)`).call(yAxis);
+  svg.append("g").attr("transform", `translate(${margin.left},0)`).attr("class", "y-axis").call(yAxis);
 
   svg
     .append("text")
@@ -47,6 +47,12 @@ const drawClicksYAxis = (svg: any, yScale: any, height: number, margin: any) => 
     .attr("dy", "1rem")
     .style("text-anchor", "middle")
     .text("Clicks");
+
+  svg
+    .selectAll(".y-axis .tick line")
+    .filter((d: any, i: number) => i !== 0) // Exclude the first tick line
+    .attr("stroke", "silver")
+    .attr("x1", width - 160);
 };
 
 const drawImpressionsYAxis = (svg: any, yScale: any, width: number, height: number, margin: any) => {
@@ -139,7 +145,7 @@ export const useD3Chart = (
       const impressionsYScale = setupImpressionsYScale(impressionsTimeSeriesData, height, margin);
 
       drawXAxis(svg, xScale, height, margin);
-      drawClicksYAxis(svg, clicksYScale, height, margin);
+      drawClicksYAxis(svg, clicksYScale, width, height, margin);
       drawImpressionsYAxis(svg, impressionsYScale, width, height, margin);
 
       drawClicksLineChart(svg, clicksTimeSeriesData, xScale, clicksYScale);
