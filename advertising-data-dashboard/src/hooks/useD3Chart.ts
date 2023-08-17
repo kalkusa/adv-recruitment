@@ -1,5 +1,16 @@
 import { useEffect } from "react";
-import { line as d3line, select, scaleTime, extent, scaleLinear, scaleOrdinal, axisBottom, max, axisLeft } from "d3";
+import {
+  line as d3line,
+  select,
+  scaleTime,
+  extent,
+  scaleLinear,
+  scaleOrdinal,
+  axisBottom,
+  max,
+  axisLeft,
+  axisRight,
+} from "d3";
 import { ValueInTime } from "../types/chartTypes";
 
 const setupClicksYScale = (data: ValueInTime[], height: number, margin: any) => {
@@ -32,14 +43,14 @@ const drawClicksYAxis = (svg: any, yScale: any, height: number, margin: any) => 
     .append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 16)
-    .attr("x", 0 - height / 2)
+    .attr("x", 0 - height / 2 + 15)
     .attr("dy", "1rem")
     .style("text-anchor", "middle")
     .text("Clicks");
 };
 
 const drawImpressionsYAxis = (svg: any, yScale: any, width: number, height: number, margin: any) => {
-  const yAxis = axisLeft(yScale).tickFormat((d) => `${d}`);
+  const yAxis = axisRight(yScale).tickFormat((d) => `${d}`);
   svg
     .append("g")
     .attr("transform", `translate(${width - margin.right},0)`)
@@ -47,9 +58,9 @@ const drawImpressionsYAxis = (svg: any, yScale: any, width: number, height: numb
 
   svg
     .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", width - margin.left + 20)
-    .attr("x", 0 - height / 2)
+    .attr("transform", "rotate(90)")
+    .attr("y", -width + margin.right - 80)
+    .attr("x", height / 2 - 20)
     .attr("dy", "1rem")
     .style("text-anchor", "middle")
     .text("Impressions");
