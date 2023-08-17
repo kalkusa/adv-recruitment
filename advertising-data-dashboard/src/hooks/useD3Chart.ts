@@ -108,15 +108,16 @@ const drawLegend = (svg: any, width: number) => {
 
   legend
     .append("rect")
-    .attr("x", width - 19)
+    .attr("x", width / 2 - 19)
+    .attr("y", 360)
     .attr("width", 19)
     .attr("height", 19)
     .attr("fill", legendColors);
 
   legend
     .append("text")
-    .attr("x", width - 24)
-    .attr("y", 9.5)
+    .attr("x", width / 2 - 24)
+    .attr("y", 370)
     .attr("dy", "0.32em")
     .text((d: any) => d);
 };
@@ -131,8 +132,8 @@ export const useD3Chart = (
       const svg = select(svgRef.current);
       svg.selectAll("*").remove();
       const width = 800;
-      const height = 400;
-      const margin = { top: 20, right: 80, bottom: 30, left: 80 };
+      const height = 380;
+      const margin = { top: 10, right: 80, bottom: 50, left: 80 };
 
       const xScale = scaleTime()
         .domain(extent([...clicksTimeSeriesData, ...impressionsTimeSeriesData], (d) => d.date) as [Date, Date])
