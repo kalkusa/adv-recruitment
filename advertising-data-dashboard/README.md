@@ -1,41 +1,41 @@
-# Template-Frontend-Challenge
+# Advertising Data Dashboard
 
-## Advertising Data ETL-V
-You are going to write a simple web application, that fetches advertising data from a given endpoint to eventually visualize it on a simple interactive dashboard. <br/>
+This repository contains the implementation of the Adverity coding challenge. It's a web application that parses CSV data and visualizes it in the form of interactive charts.
 
-For this, you need to first extract the data (a CSV file) from [http://adverity-challenge.s3-website-eu-west-1.amazonaws.com/DAMKBAoDBwoDBAkOBAYFCw.csv](http://adverity-challenge.s3-website-eu-west-1.amazonaws.com/DAMKBAoDBwoDBAkOBAYFCw.csv).
+## Technologies Used
 
-The data contains:
-- one time dimension (*Date*)
-- two regular dimensions (*Campaign*, *Datasource*)
-- two metrics (*Clicks*, *Impressions*)
+- **React**: For building user interface.
+- **TypeScript**: For type safety.
+- **D3**: For data visualizations in web browsers.
+- **MUI, Styled Components**: For clean and beautiful UI and components with readable CSS.
+- **Lodash**: For easy data processing.
+- **Jest, React Testing Library**: For unit testing.
 
-The goal is to provide a **simple dashboard**, that shows those **metrics** for given regular dimension values (as user input) **over time**. It could look like this:
+## Project Structure
 
-![example](images/dashboard.png)
+- **public**: Static assets like CSV data files, favicon, and other public assets.
+- **src**: 
+  - **components**: Various React components like Chart, Filter, and Info.
+  - **contexts**: Contains React context providers for managing global state.
+  - **hooks**: Custom hooks for functionalities like fetching data, filtering, and D3 chart rendering.
+  - **pages**: The main HomePage component.
+  - **utils**: Utility functions for data parsing and calculations.
+  - **types**: TypeScript type definitions.
 
-Initially, no *Datasource* or *Campaign* is selected, hence the chart should show *Clicks* and *Impressions* over time for the entire data set. Users can then filter the dataset for both *Datasources* and *Campaigns*. <br/>
+## Running the App Locally
 
-Keep your UI/UX simple and only implement basic functionalities. The focus lies on the proper design of your application. <br/>
+Recommended node and npm versions - node: v18.17.1, npm: 7.23.0
 
-If not told otherwise, use one of the following tech stacks:
+1. **Install npm packages**:
+    ```
+    npm install
+    ```
 
-## A) React Frontend only
-Use react with:
-- [create-react-app](https://github.com/facebook/create-react-app) to bootstrap your application
-- [with a proper design of your components](https://facebook.github.io/react/docs/thinking-in-react.html)
-- react hooks to manage state and side effects
-- lodash to transform your data
-- an idiomatic functional programming approach with javascript / es6
-to implement the entire application as a pure frontend application - that fetches the data, does the heavy computation and visualizes the result.
-
-## B) Django only
-Use django (with django views) to extract, transform, load, query and visualize the data.
-
-## C) Backend and frontend
-Use either **django** or **micronaut** (with groovy or kotlin) to implement the backend. <br/>
-
-And **react** with [create-react-app](https://github.com/facebook/create-react-app) for the frontend. <br/>
-
-Carefully draw boundaries on who is responsible for what.
-   
+2. **Start the development server**
+    ```
+    npm start
+    ```
+2. **To run unit tests**
+    ```
+    npm test
+    ```
