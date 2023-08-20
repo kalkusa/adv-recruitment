@@ -27,7 +27,7 @@ const TestComponent = ({ dataSources }: { dataSources: string[] }) => {
 describe("useCampaigns", () => {
   it("should fetch and return all campaigns if no data source is provided", async () => {
     render(
-      <ParsedDataContext.Provider value={mockData}>
+      <ParsedDataContext.Provider value={{ parsedData: mockData, isLoading: false }}>
         <TestComponent dataSources={[]} />
       </ParsedDataContext.Provider>
     );
@@ -39,7 +39,7 @@ describe("useCampaigns", () => {
 
   it("should fetch and return campaigns filtered by data source", async () => {
     render(
-      <ParsedDataContext.Provider value={mockData}>
+      <ParsedDataContext.Provider value={{ parsedData: mockData, isLoading: false }}>
         <TestComponent dataSources={["Facebook Ads"]} />
       </ParsedDataContext.Provider>
     );

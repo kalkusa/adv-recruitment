@@ -27,7 +27,9 @@ describe("useDatasources", () => {
     ];
 
     const wrapper = ({ children }: WrapperProps) => (
-      <ParsedDataContext.Provider value={mockData}>{children}</ParsedDataContext.Provider>
+      <ParsedDataContext.Provider value={{ parsedData: mockData, isLoading: false }}>
+        {children}
+      </ParsedDataContext.Provider>
     );
 
     const { result } = renderHook(() => useDatasources(), { wrapper });

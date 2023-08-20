@@ -28,9 +28,11 @@ const Title = styled.h1`
 
 const Chart = () => {
   const { filter } = useFilter();
-  const clicksTimeSeriesData = useClicksTimeSeries(filter);
-  const impressionsTimeSeriesData = useImpressionsTimeSeries(filter);
+  const [clicksTimeSeriesData, clicksLoading] = useClicksTimeSeries(filter);
+  const [impressionsTimeSeriesData, impressionsLoading] = useImpressionsTimeSeries(filter);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const isLoading = clicksLoading || impressionsLoading;
+  const isDataValid = clicksTimeSeriesData?.length > 2 && impressionsTimeSeriesData?.length > 2;
 
   useD3Chart(svgRef, clicksTimeSeriesData, impressionsTimeSeriesData);
 
@@ -46,16 +48,22 @@ const Chart = () => {
     return `${selectedDataSourcesLabel}; ${selectedCampaignsSourcesLabel}`;
   };
 
+  const getChart = () => {
+    if (isLoading) {
+      return <CircularProgress disableShrink />;
+    }
+
+    if (!isDataValid) {
+      return <div>Data is not valid.</div>;
+    }
+
+    return <svg ref={svgRef} width="800" height="400"></svg>;
+  };
+
   return (
     <Section id="chart">
       <Title>{getTitle()}</Title>
-      <ChartContainer>
-        {clicksTimeSeriesData?.length > 1 && impressionsTimeSeriesData?.length > 1 ? (
-          <svg ref={svgRef} width="800" height="400"></svg>
-        ) : (
-          <CircularProgress disableShrink />
-        )}
-      </ChartContainer>
+      <ChartContainer>{getChart()}</ChartContainer>
     </Section>
   );
 };
